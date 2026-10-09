@@ -24,10 +24,10 @@ export default function DepthGallery(){
       .fromTo(scene,{'--arrival-light':0},{'--arrival-light':1,duration:1,ease:'none'},0);
    },scene);
    let last=0;
-   const trigger=ScrollTrigger.create({trigger:scene,refreshPriority:-10,start:'top top',end:()=>`+=${innerHeight*(projects.length*1.25)}`,pin:true,scrub:true,invalidateOnRefresh:true,onUpdate:self=>{
+   const trigger=ScrollTrigger.create({trigger:scene,refreshPriority:-10,start:'top top',end:()=>`+=${innerHeight*(projects.length*(window.matchMedia('(max-width:700px)').matches?.75:.95))}`,pin:true,scrub:true,invalidateOnRefresh:true,onUpdate:self=>{
     const total=self.progress*projects.length;const index=Math.min(projects.length-1,Math.floor(total));const phase=Math.min(1,total-index);
-    const bridge=gsap.utils.clamp(0,1,(total-projects.length+.42)/.42);
-    scene.style.setProperty('--work-bridge',String(bridge));
+    const bridge=0; const handoff=index===projects.length-1?gsap.utils.clamp(0,1,(phase-.72)/.28):0;
+    scene.style.setProperty('--work-bridge',String(bridge)); scene.style.setProperty('--project-handoff',String(handoff)); scene.style.setProperty('--portfolio-chrome',String(1-handoff));
     if(index!==last){setDirection(index>last?1:-1);setActive(index);last=index;}
     const entry=Math.min(1,phase/.22);const exit=index<projects.length-1?Math.max(0,(phase-.78)/.22):0;
     scene.style.setProperty('--scroll-scale',String(.88+.12*entry-.05*exit-.18*bridge));
@@ -43,12 +43,12 @@ export default function DepthGallery(){
  const prev=(active+projects.length-1)%projects.length,next=(active+1)%projects.length;
  const change=(step:number)=>{select((active+step+projects.length)%projects.length);};
  return <section ref={root} id="work" className="mirage-work" aria-label="Selected Work" style={{'--project-accent':projects[active].color} as React.CSSProperties}>
- <div className="work-arrival"><header className="mirage-work-heading"><span>SELECTED WORK</span><a className="work-all-link" href="https://bybahr.com/work/" target="_blank" rel="noreferrer">ALL PROJECTS ↗</a></header>
+ <div className="work-arrival"><header className="mirage-work-heading"><span>SELECTED WORK</span><a className="work-all-link" href="https://bybahr.com/work/" target="_blank" rel="noreferrer">ALL PROJECTS <span className="mobile-decoration">↗</span></a></header>
  <div className="mirage-project-stage" onTouchStart={e=>{touch.current=e.touches[0].clientX;}} onTouchEnd={e=>{const delta=e.changedTouches[0].clientX-touch.current;if(Math.abs(delta)>50)change(delta<0?1:-1);}}>
  <button className="mirage-side mirage-side-prev" onClick={()=>change(-1)} aria-label={`Previous project: ${projects[prev].name}`}><img src={projects[prev].image} alt="" /><span>←</span></button>
  <a key={active} className={`mirage-project ${direction<0?'from-left':'from-right'}`} href={projects[active].url} target="_blank" rel="noreferrer" onPointerMove={e=>{if(e.pointerType!=='mouse')return;const r=e.currentTarget.getBoundingClientRect();e.currentTarget.style.setProperty('--pointer-x',`${(e.clientX-r.left)/r.width*100}%`);e.currentTarget.style.setProperty('--pointer-y',`${(e.clientY-r.top)/r.height*100}%`);e.currentTarget.style.setProperty('--image-x',`${((e.clientX-r.left)/r.width-.5)*-12}px`);e.currentTarget.style.setProperty('--image-y',`${((e.clientY-r.top)/r.height-.5)*-8}px`);}} onPointerLeave={e=>{e.currentTarget.style.setProperty('--image-x','0px');e.currentTarget.style.setProperty('--image-y','0px');}} aria-label={`Explore ${projects[active].name}`}>
  <img className="mirage-project-image" src={projects[active].image} alt={`${projects[active].name} website preview`} />
- <div className="mirage-project-shade" /><div className="mirage-project-title"><span>{projects[active].category}</span><h2>{projects[active].name}</h2><span className="mirage-project-invitation">EXPLORE THE EXPERIENCE ↗</span></div><span className="mirage-project-cursor" aria-hidden="true">VIEW<br/>PROJECT ↗</span>
+ <div className="mirage-project-shade" /><div className="mirage-project-title"><span>{projects[active].category}</span><h2>{projects[active].name}</h2><span className="mirage-project-invitation">EXPLORE THE EXPERIENCE <span className="mobile-decoration">↗</span></span></div><span className="mirage-project-cursor" aria-hidden="true">VIEW<br/>PROJECT ↗</span>
  </a>
  <button className="mirage-side mirage-side-next" onClick={()=>change(1)} aria-label={`Next project: ${projects[next].name}`}><img src={projects[next].image} alt="" /><span>→</span></button>
  </div>

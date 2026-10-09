@@ -110,8 +110,8 @@ void main() {
   vec2 colorUv = rotation * (p * .45 + slope * 2. + bend * .19) + .5;
   // Light theme: navy / cobalt / azure from the palette's blue channel. Dark theme: the pastel orb texture as-is.
   float blueTone = texture2D(palette, colorUv).b;
-  vec3 lightColor = mix(vec3(.018, .055, .16), vec3(.025, .20, .50), smoothstep(.05, .55, blueTone));
-  lightColor = mix(lightColor, vec3(.055, .38, .68), smoothstep(.55, .95, blueTone));
+  vec3 lightColor = mix(vec3(.16, .48, .68), vec3(.35, .75, .88), smoothstep(.05, .55, blueTone));
+  lightColor = mix(lightColor, vec3(.78, .94, .98), smoothstep(.55, .95, blueTone));
   vec3 color = mix(texture2D(darkPalette, colorUv).rgb, lightColor, themeMix);
   vec3 light = normalize(vec3(cos(time * .55) * .9, sin(time * .55) * .65, 1.));
   float diffuse = max(0., dot(normal, light));

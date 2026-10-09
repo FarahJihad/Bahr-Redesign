@@ -46,7 +46,7 @@ export default function HeroMark({ interactive = false }: { interactive?: boolea
     const tick = (now: number) => {
       frame = 0; if (!visible || document.hidden || reduced.matches || !loaded) return;
       time += Math.min((now - last) / 1000, .05); last = now; shimmer.value = time;
-      group.position.y = Math.sin(time * .65) * .065;
+      group.position.y = Math.sin(time * .7) * .16;
       currentPointer.x += (pointer.x - currentPointer.x) * .07; currentPointer.y += (pointer.y - currentPointer.y) * .07;
       group.rotation.set(.14 + Math.sin(time * .35) * .045 + currentPointer.y * .24, -.42 + Math.sin(time * .3) * .11 + currentPointer.x * .5, -.035 - currentPointer.x * .045);
       renderer.render(scene, camera); frame = requestAnimationFrame(tick);
@@ -65,7 +65,7 @@ export default function HeroMark({ interactive = false }: { interactive?: boolea
       }
       const box = new THREE.Box3().setFromObject(group); const center = box.getCenter(new THREE.Vector3());
       group.children.forEach(child => child.position.sub(center));
-      group.scale.set(.066, -.066, .066); group.rotation.set(.14, -.42, -.035);
+      group.scale.set(.072, -.072, .072); group.rotation.set(.14, -.42, -.035);
       loaded = true; element.classList.add('is-ready'); resize(); resume();
     }).catch(() => { /* Keep the original SVG visible if WebGL or loading fails. */ });
     document.addEventListener('visibilitychange', resume); reduced.addEventListener('change', resume); resize();

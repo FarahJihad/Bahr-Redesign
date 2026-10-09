@@ -16,6 +16,7 @@ import HeroMark from "./components/HeroMark";
 import OceanWaves from "./components/OceanWaves";
 import DepthGallery from "./components/DepthGallery";
 import "./App.css";
+import "./styles/responsive-layout.css";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -102,6 +103,7 @@ function App() {
             "-=0.5"
           );
 
+        gsap.matchMedia().add("(prefers-reduced-motion: no-preference)", () => {
         const descent = gsap.timeline({
           scrollTrigger: {
             trigger: sceneRef.current,
@@ -198,6 +200,7 @@ function App() {
           .to('.discovery-light-pass', { opacity: 0, duration: .2 }, 2.15)
           .to('.depth-reveal p', { opacity: 0, duration: .3 }, 1.7)
           .to({}, { duration: .2 });
+        });
       }
 
       if (!reducedMotion) {
@@ -217,7 +220,7 @@ function App() {
       gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', () => {
         const cards = gsap.utils.toArray<HTMLElement>('.expertise-card');
         gsap.set(cards, { opacity: 0, scale: .7, z: -300 });
-        const journey = gsap.timeline({ scrollTrigger: { trigger: '#services', refreshPriority:0, start: 'top top', end: () => '+=' + innerHeight * 4.5, pin: true, scrub: .8, invalidateOnRefresh: true } });
+        const journey = gsap.timeline({ scrollTrigger: { trigger: '#services', refreshPriority:0, start: 'top top', end: () => '+=' + innerHeight * (window.matchMedia('(max-width:700px)').matches ? 2.6 : 3.2), pin: true, scrub: .8, invalidateOnRefresh: true } });
         journey.to('.expertise-intro', { opacity: 0, scale: 1.12, duration: .65 }).to({}, { duration: .12 });
         cards.forEach((card, i) => {
           journey.fromTo(card, { opacity: 0, scale: .7, z: -300, filter: 'blur(9px)' }, { opacity: 1, scale: 1, z: 0, filter: 'blur(0px)', duration: .75 })
@@ -493,9 +496,9 @@ function App() {
         <a className="contact-email" href="mailto:dive@b7r.agency"><span className="contact-email-label">START A CONVERSATION</span><span className="contact-email-address">dive@b7r.agency</span><ArrowUpRight aria-hidden="true" /></a>
         <div className="bahr-footer-grid">
           <div className="bahr-footer-column"><span className="footer-label">EXPERTISE</span><a href="#services">Web Platforms</a><a href="#services">AI &amp; Automation</a><a href="#services">Mobile Applications</a><a href="#services">Product Design</a></div>
-          <div className="bahr-footer-column"><span className="footer-label">EXPLORE</span><a href="#about">The Agency</a><a href="#work">Selected Work</a><a href="https://www.linkedin.com/company/bybahr" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a></div>
+          <div className="bahr-footer-column"><span className="footer-label">EXPLORE</span><a href="#about">The Agency</a><a href="#work">Selected Work</a><a href="https://www.linkedin.com/company/bybahr" target="_blank" rel="noopener noreferrer">LinkedIn <span className="mobile-decoration">↗</span></a></div>
           <div className="bahr-footer-brand"><a href="#home" className="footer-brand"><img src="/bahr-mark.svg" alt="" />BAHR</a><h3>Design with depth</h3><p>An independent digital agency bringing thoughtful design and purposeful engineering together</p><span>Jeddah, Saudi Arabia</span></div>
-          <div className="bahr-footer-column"><span className="footer-label">KEEP IN TOUCH</span><a href="mailto:dive@b7r.agency">dive@b7r.agency</a><a href="#home">Back to the surface ↑</a><span className="footer-copyright">© {new Date().getFullYear()} Bahr Agency<br />Made of depth</span></div>
+          <div className="bahr-footer-column"><span className="footer-label">KEEP IN TOUCH</span><a href="mailto:dive@b7r.agency">dive@b7r.agency</a><a href="#home">Back to the surface <span className="mobile-decoration">↑</span></a><span className="footer-copyright">© {new Date().getFullYear()} Bahr Agency<br />Made of depth</span></div>
         </div>
       </footer>
     </main>
